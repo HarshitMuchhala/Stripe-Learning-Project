@@ -2,7 +2,7 @@ function PaymentSummary({ name, email, plan, billingCycle, amount }) {
   return (
     <div
       style={{
-        border: "1px solid #ddd",
+        border: "1px solid #340101",
         padding: "20px",
         marginTop: "20px",
         borderRadius: "8px",

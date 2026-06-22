@@ -38,7 +38,8 @@
  * layer structure.
  * ============================================================
  */
-
+const paymentStatusRoutes =
+require("./routes/paymentStatus"); 
 require("dotenv").config();
 
 const express = require("express");
@@ -49,12 +50,34 @@ const { successResponse, errorResponse } = require("./utils/responseHandler");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-
+const webhookRoutes =
+require("./routes/webhook");
 // ------------------------------------------------------------
 // Global Middleware
 // ------------------------------------------------------------
 app.use(cors()); // Allows the React frontend (different origin/port) to call this API
-app.use(express.json()); // Parses incoming JSON request bodies into req.body
+app.use(
+  "/api/payment",
+  webhookRoutes
+);
+
+//app.use(express.json()); // Parses incoming JSON request bodies into req.body
+
+app.use(
+  "/api/payment/webhook",
+
+  express.raw({
+    type: "application/json",
+  })
+);
+
+app.use(express.json());
+
+app.use(
+  "/api/payment",
+  paymentStatusRoutes
+);
+
 app.use(
   "/api/payment",
   paymentRoutes
@@ -104,3 +127,4 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+

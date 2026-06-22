@@ -1,35 +1,21 @@
 import { useState } from "react";
 
-import {
-  CardElement,
-  useStripe,
-  useElements,
-} from "@stripe/react-stripe-js";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
 import { useNavigate } from "react-router-dom";
 
-import {
-  createPaymentIntent,
-} from "../services/paymentApi";
+import { createPaymentIntent } from "../services/paymentApi";
 
-function PaymentForm({
-  name,
-  email,
-  plan,
-  billingCycle,
-  amount,
-}) {
+function PaymentForm({ name, email, plan, billingCycle, amount }) {
   const stripe = useStripe();
 
   const elements = useElements();
 
   const navigate = useNavigate();
 
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [error, setError] =
-    useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,43 +32,36 @@ function PaymentForm({
       // STEP 1
       // Create Payment Intent from backend
 
-      const response =
-        await createPaymentIntent({
-          name,
-          email,
-          plan,
-          billingCycle,
-          amount,
-        });
+      const response = await createPaymentIntent({
+        name,
+        email,
+        plan,
+        billingCycle,
+        amount,
+      });
 
-      const clientSecret =
-        response.clientSecret;
+      const clientSecret = response.clientSecret;
 
       // STEP 2
       // Get Card Element
 
-      const cardElement =
-        elements.getElement(CardElement);
+      const cardElement = elements.getElement(CardElement);
 
       // STEP 3
       // Confirm Card Payment
 
-      const result =
-        await stripe.confirmCardPayment(
-          clientSecret,
-          {
-            payment_method: {
-              card: cardElement,
-              billing_details: {
-                name,
-                email,
-              },
-            },
-          }
-        );
+      const result = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: {
+            name,
+            email,
+          },
+        },
+      });
 
       // STEP 4
-      // Handle Errors
+      // stripe error
 
       if (result.error) {
         setError(result.error.message);
@@ -92,31 +71,16 @@ function PaymentForm({
 
       // STEP 5
       // Payment Success
-
-      if (
-        result.paymentIntent.status ===
-        "succeeded"
-      ) {
-        navigate("/success", {
-          state: {
-            name,
-            email,
-            plan,
-            billingCycle,
-            amount,
-          },
-        });
+      const paymentIntent = result.paymentIntent;
+      if (result.paymentIntent.status === "succeeded") {
+        navigate(`/processing?payment_intent=${paymentIntent.id}`, { state: { name, email, plan, billingCycle, amount } });
       }
 
       setLoading(false);
-
     } catch (err) {
-
       console.log(err);
 
-      setError(
-        "Payment failed"
-      );
+      setError("Payment failed");
 
       setLoading(false);
     }
@@ -124,7 +88,6 @@ function PaymentForm({
 
   return (
     <form onSubmit={handleSubmit}>
-
       <div
         style={{
           border: "1px solid #ccc",
@@ -138,13 +101,8 @@ function PaymentForm({
 
       <br />
 
-      <button
-        type="submit"
-        disabled={loading}
-      >
-        {loading
-          ? "Processing..."
-          : `Pay ₹${amount}`}
+      <button type="submit" disabled={loading}>
+        {loading ? "Processing..." : `Pay ₹${amount}`}
       </button>
 
       {error && (

@@ -3,27 +3,27 @@ import { useLocation } from "react-router-dom";
 function Success() {
   const location = useLocation();
 
-  const paymentData = location.state;
+  const data = location.state || {};
 
   return (
-    <div>
+    <div
+      style={{
+        maxWidth: "700px",
+        margin: "100px auto",
+        textAlign: "center",
+      }}
+    >
       <h1>Payment Successful</h1>
 
-      <p>Name: {paymentData.name}</p>
+      <p>Your payment has been verified.</p>
 
-      <p>Email: {paymentData.email}</p>
+      <hr />
 
-      <p>Plan: {paymentData.plan}</p>
-
-      <p>
-        Billing:
-        {paymentData.billingCycle}
-      </p>
-
-      <p>
-        Amount:
-        ₹{paymentData.amount}
-      </p>
+      <p>Name: {data.name || "N/A"}</p>
+      <p>Email: {data.email || "N/A"}</p>
+      <p>Plan: {data.plan || "N/A"}</p>
+      <p>Billing: {data.billingCycle || "N/A"}</p>
+      <p>Amount: ₹{data.amount || 0}</p>
     </div>
   );
 }

@@ -59,7 +59,8 @@
 const express = require("express");
 
 const router = express.Router();
-
+const payments =
+  require("../utils/paymentStore");
 const {
   createStripePaymentIntent,
 } = require("../services/stripeService");
@@ -102,4 +103,92 @@ router.post(
   }
 );
 
+router.get(
+  "/status/:id",
+  (req, res) => {
+
+    const paymentIntentId =
+      req.params.id;
+
+    const payment =
+      payments[paymentIntentId];
+
+    if (!payment) {
+
+      return res.json({
+        status: "processing",
+      });
+
+    }
+
+    return res.json({
+      status: payment.status,
+    });
+
+  }
+);
+
+
+router.post(
+  "/webhook",
+  express.raw({
+    type: "application/json",
+  }),
+
+  (req, res) => {
+
+    const event = req.body;
+
+    console.log(
+      "Webhook Event:",
+      event.type
+    );
+
+    // PAYMENT SUCCESS
+    if (
+      event.type ===
+      "payment_intent.succeeded"
+    ) {
+
+      const paymentIntent =
+        event.data.object;
+
+      payments[
+        paymentIntent.id
+      ] = {
+        status: "succeeded",
+      };
+
+      console.log(
+        "Payment succeeded:",
+        paymentIntent.id
+      );
+    }
+
+    // PAYMENT FAILED
+    if (
+      event.type ===
+      "payment_intent.payment_failed"
+    ) {
+
+      const paymentIntent =
+        event.data.object;
+
+      payments[
+        paymentIntent.id
+      ] = {
+        status: "failed",
+      };
+
+      console.log(
+        "Payment failed:",
+        paymentIntent.id
+      );
+    }
+
+    res.json({
+      received: true,
+    });
+  }
+);
 module.exports = router;

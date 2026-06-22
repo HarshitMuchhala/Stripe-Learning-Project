@@ -62,16 +62,74 @@ function PaymentForm({ name, email, plan, billingCycle, amount }) {
 
       // STEP 4
       // stripe error
+if (result.error) {
 
-      if (result.error) {
-        setError(result.error.message);
-        setLoading(false);
-        return;
-      }
+  console.log(
+    "Stripe Error:",
+    result.error
+  );
+
+  switch (
+    result.error.decline_code
+  ) {
+
+    case "incorrect_number":
+      setError(
+        "Incorrect card number"
+      );
+      break;
+
+    case "incorrect_cvc":
+      setError(
+        "Incorrect CVV"
+      );
+      break;
+
+    case "expired_card":
+      setError(
+        "Card has expired"
+      );
+      break;
+
+    case "insufficient_funds":
+      setError(
+        "Insufficient balance"
+      );
+      break;
+
+    case "lost_card":
+      setError(
+        "This card is reported lost"
+      );
+      break;
+
+    case "stolen_card":
+      setError(
+        "This card is blocked"
+      );
+      break;
+
+    case "do_not_honor":
+      setError(
+        "Bank declined payment"
+      );
+      break;
+
+    default:
+      setError(
+        "Payment failed. Please try again."
+      );
+  }
+
+  setLoading(false);
+
+  return;
+}
 
       // STEP 5
       // Payment Success
       const paymentIntent = result.paymentIntent;
+
       if (result.paymentIntent.status === "succeeded") {
         navigate(`/processing?payment_intent=${paymentIntent.id}`, { state: { name, email, plan, billingCycle, amount } });
       }
@@ -80,11 +138,14 @@ function PaymentForm({ name, email, plan, billingCycle, amount }) {
     } catch (err) {
       console.log(err);
 
-      setError("Payment failed");
+      setError("Payment failed. Try another card.");
 
       setLoading(false);
     }
-  };
+
+
+    };
+
 
   return (
     <form onSubmit={handleSubmit}>

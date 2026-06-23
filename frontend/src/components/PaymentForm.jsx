@@ -151,26 +151,48 @@ if (result.error) {
     <form onSubmit={handleSubmit}>
       <div
         style={{
-          border: "1px solid #ccc",
-          padding: "15px",
-          borderRadius: "8px",
+          border: "1px solid #e5e7eb",
+          padding: "16px",
+          borderRadius: "4px",
           marginTop: "20px",
+          backgroundColor: "#ffffff",
         }}
       >
-        <CardElement />
+        <CardElement options={{ style: { base: { fontSize: '16px', color: '#000000', '::placeholder': { color: '#aab7c4' } } } }} />
       </div>
 
-      <br />
-
-      <button type="submit" disabled={loading}>
+      <button 
+        type="submit" 
+        disabled={loading}
+        style={{
+          width: "100%",
+          padding: "14px 28px",
+          backgroundColor: "#000000",
+          color: "#ffffff",
+          border: "1px solid #000000",
+          borderRadius: "4px",
+          fontSize: "1rem",
+          cursor: loading ? "not-allowed" : "pointer",
+          opacity: loading ? 0.7 : 1,
+          transition: "all 0.2s ease",
+          marginTop: "24px"
+        }}
+        onMouseOver={(e) => { if(!loading) { e.target.style.backgroundColor = "#ffffff"; e.target.style.color = "#000000"; } }}
+        onMouseOut={(e) => { if(!loading) { e.target.style.backgroundColor = "#000000"; e.target.style.color = "#ffffff"; } }}
+      >
         {loading ? "Processing..." : `Pay ₹${amount}`}
       </button>
 
       {error && (
         <p
           style={{
-            color: "red",
-            marginTop: "10px",
+            color: "#000000",
+            marginTop: "16px",
+            padding: "12px",
+            border: "1px solid #000000",
+            borderRadius: "4px",
+            backgroundColor: "#fafafa",
+            fontSize: "0.9rem"
           }}
         >
           {error}

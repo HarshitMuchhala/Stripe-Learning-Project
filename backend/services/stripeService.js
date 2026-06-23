@@ -16,6 +16,14 @@ const createStripePaymentIntent =
     return paymentIntent;
 };
 
+const getStripePaymentIntentStatus =
+  async (paymentIntentId) => {
+    const paymentIntent =
+      await stripe.paymentIntents.retrieve(paymentIntentId);
+    return paymentIntent;
+  };
+
 module.exports = {
   createStripePaymentIntent,
+  getStripePaymentIntentStatus,
 };

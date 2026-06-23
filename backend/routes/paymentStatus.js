@@ -2,29 +2,29 @@ const express = require("express");
 
 const router = express.Router();
 
-const payments =
-require("../utils/paymentStore");
+const { getStripePaymentIntentStatus } = require("../services/stripeService");
 
 router.get(
   "/status/:id",
 
-  (req, res) => {
+  async (req, res) => {
 
-    const paymentId =
-      req.params.id;
+    try {
+      const paymentId =
+        req.params.id;
 
-    const payment =
-      payments[paymentId];
+      const payment =
+        await getStripePaymentIntentStatus(paymentId);
 
-    if (!payment) {
+      if (payment.status === "requires_payment_method" || payment.status === "canceled") {
+        return res.json({ status: "failed" });
+      }
 
-      return res.json({
-        status: "processing",
-      });
-
+      res.json({ status: payment.status });
+    } catch (error) {
+      console.error(error);
+      res.json({ status: "failed" });
     }
-
-    res.json(payment);
 
   }
 );

@@ -38,10 +38,9 @@
  * layer structure.
  * ============================================================
  */
+require("dotenv").config();
 const paymentStatusRoutes =
 require("./routes/paymentStatus"); 
-require("dotenv").config();
-
 const express = require("express");
 const cors = require("cors");
 

@@ -90,128 +90,156 @@ const amount = prices[plan]?.[billingCycle] || 0;
 //   }
 // };
   return (
-     <div
-     style={{
-      maxWidth: "900px",
-      margin: "0 auto",
-      padding: "20px",
-    }}
-  >
-      <h1>Membership Page</h1>
+    <div
+      style={{
+        maxWidth: "600px",
+        margin: "0 auto",
+        padding: "60px 20px",
+        fontFamily: "system-ui, -apple-system, sans-serif",
+        color: "#000000",
+        backgroundColor: "#ffffff",
+      }}
+    >
+      <button 
+        onClick={() => navigate("/")}
+        style={{
+          background: "none",
+          border: "none",
+          padding: 0,
+          color: "#6b7280",
+          cursor: "pointer",
+          fontSize: "14px",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          marginBottom: "32px",
+          transition: "color 0.2s"
+        }}
+        onMouseOver={(e) => e.target.style.color = "#000000"}
+        onMouseOut={(e) => e.target.style.color = "#6b7280"}
+      >
+        ← Return to Home
+      </button>
+<h1
+  style={{
+    fontSize: "2.5rem",
+    fontWeight: "700",
+    letterSpacing: "-0.02em",
+    marginBottom: "40px",
+    textAlign: "center",
+  }}
+>
+  Membership Checkout
+</h1>
+      <section style={{ marginBottom: "40px" }}>
+        <h2 style={{ fontSize: "1.2rem", fontWeight: "500", marginBottom: "16px", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>1. Select Plan</h2>
 
-      <h2>Select Membership Plan</h2>
-
-      <button onClick={() => setPlan("general")}>General Membership</button>
-
-      <button onClick={() => setPlan("premium")}>Premium Membership</button>
-
-      <h2>Select Billing Cycle</h2>
-
-      <h2>Select Membership</h2>
-
-      <PlanCard
-        title="General Membership"
-        monthlyPrice={199}
-        selected={plan === "general"}
-        onSelect={() => setPlan("general")}
-      />
-
-      <PlanCard
-        title="Premium Membership"
-        monthlyPrice={499}
-        selected={plan === "premium"}
-        onSelect={() => setPlan("premium")}
-      />
-
-      <h2>Billing Cycle</h2>
-{/* Radio Buttons */}
-
-      <label>
-        <input
-          type="radio"
-          name="billing"
-          value="monthly"
-          onChange={(e) => setBillingCycle(e.target.value)}
+        <PlanCard
+          title="General Membership"
+          monthlyPrice={199}
+          selected={plan === "general"}
+          onSelect={() => setPlan("general")}
         />
-        Monthly
-      </label>
 
-      <br />
-
-      <label>
-        <input
-          type="radio"
-          name="billing"
-          value="quarterly"
-          onChange={(e) => setBillingCycle(e.target.value)}
+        <PlanCard
+          title="Premium Membership"
+          monthlyPrice={499}
+          selected={plan === "premium"}
+          onSelect={() => setPlan("premium")}
         />
-        Quarterly
-      </label>
+      </section>
 
-      <br />
+      <section style={{ marginBottom: "40px" }}>
+        <h2 style={{ fontSize: "1.2rem", fontWeight: "500", marginBottom: "16px", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>2. Billing Cycle</h2>
 
-      <label>
-        <input
-          type="radio"
-          name="billing"
-          value="yearly"
-          onChange={(e) => setBillingCycle(e.target.value)}
-        />
-        Yearly
-      </label>
+        <div style={{ display: "flex", gap: "24px", marginTop: "16px" }}>
+          <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+            <input
+              type="radio"
+              name="billing"
+              value="monthly"
+              onChange={(e) => setBillingCycle(e.target.value)}
+              style={{ cursor: "pointer", accentColor: "#000000" }}
+            />
+            Monthly
+          </label>
 
-      <hr />
-<h2>User Information</h2>
+          <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+            <input
+              type="radio"
+              name="billing"
+              value="quarterly"
+              onChange={(e) => setBillingCycle(e.target.value)}
+              style={{ cursor: "pointer", accentColor: "#000000" }}
+            />
+            Quarterly
+          </label>
 
-<div>
-  <input
-    type="text"
-    placeholder="Enter Name"
-    value={name}
-    onChange={(e) =>
-      setName(e.target.value)
-    }
-  />
-</div>
+          <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+            <input
+              type="radio"
+              name="billing"
+              value="yearly"
+              onChange={(e) => setBillingCycle(e.target.value)}
+              style={{ cursor: "pointer", accentColor: "#000000" }}
+            />
+            Yearly
+          </label>
+        </div>
+      </section>
 
-<br />
+      <section style={{ marginBottom: "40px" }}>
+        <h2 style={{ fontSize: "1.2rem", fontWeight: "500", marginBottom: "16px", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>3. User Information</h2>
 
-<div>
-  <input
-    type="email"
-    placeholder="Enter Email"
-    value={email}
-    onChange={(e) =>
-      setEmail(e.target.value)
-    }
-  />
-</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginTop: "16px" }}>
+          <input
+            type="text"
+            placeholder="Enter Full Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            style={{
+              padding: "14px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "4px",
+              fontSize: "1rem",
+              width: "100%",
+              boxSizing: "border-box"
+            }}
+          />
+
+          <input
+            type="email"
+            placeholder="Enter Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{
+              padding: "14px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "4px",
+              fontSize: "1rem",
+              width: "100%",
+              boxSizing: "border-box"
+            }}
+          />
+        </div>
+      </section>
 
       <PaymentSummary 
-      name={name}
-      email={email}
-      plan={plan} 
-      billingCycle={billingCycle} 
-      amount={amount} />
-      
-      
-      {/* <p>Selected Plan: {plan || "None"}</p> */}
-      {/* <p>Billing Cycle: {billingCycle || "None"}</p>
-      <p>Amount: ₹{amount}</p> */}
+        name={name}
+        email={email}
+        plan={plan} 
+        billingCycle={billingCycle} 
+        amount={amount} 
+      />
 
-      {/* <button onClick={handlePayment}>
-  Pay Now
-</button> */}
-<PaymentForm
-  name={name}
-  email={email}
-  plan={plan}
-  billingCycle={billingCycle}
-  amount={amount}
-/>
+      <PaymentForm
+        name={name}
+        email={email}
+        plan={plan}
+        billingCycle={billingCycle}
+        amount={amount}
+      />
     </div>
-
-   
   );
 }
 

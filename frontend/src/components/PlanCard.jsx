@@ -9,23 +9,26 @@ function PlanCard({
       onClick={onSelect}
       style={{
         border: selected
-          ? "2px solid green"
-          : "1px solid #ccc",
-        padding: "20px",
-        marginBottom: "15px",
+          ? "2px solid #000000"
+          : "1px solid #e5e7eb",
+        padding: "24px",
+        marginBottom: "16px",
         cursor: "pointer",
-        borderRadius: "8px",
+        borderRadius: "4px",
+        backgroundColor: selected ? "#fafafa" : "#ffffff",
+        transition: "all 0.2s ease"
       }}
     >
-      <h3>{title}</h3>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <h3 style={{ margin: 0, fontSize: "1.2rem", fontWeight: "500", color: "#000000" }}>{title}</h3>
+        {selected && (
+          <span style={{ fontSize: "0.9rem", fontWeight: "500", color: "#000000" }}>✓ Selected</span>
+        )}
+      </div>
 
-      <p>
+      <p style={{ margin: "8px 0 0 0", color: "#666666" }}>
         Starting at ₹{monthlyPrice}/month
       </p>
-
-      {selected && (
-        <p>✓ Selected</p>
-      )}
     </div>
   );
 }

@@ -103,30 +103,6 @@ router.post(
   }
 );
 
-router.get(
-  "/status/:id",
-  (req, res) => {
-
-    const paymentIntentId =
-      req.params.id;
-
-    const payment =
-      payments[paymentIntentId];
-
-    if (!payment) {
-
-      return res.json({
-        status: "processing",
-      });
-
-    }
-
-    return res.json({
-      status: payment.status,
-    });
-
-  }
-);
 
 
 router.post(

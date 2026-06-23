@@ -1,76 +1,7 @@
-// import { useEffect, useState } from "react";
-// import { useLocation } from "react-router-dom";
-// import axios from "axios";
-
-// function Processing() {
-//   const location = useLocation();
-//   const paymentIntentId = location.state?.paymentIntentId;
-//   const [status, setStatus] = useState("processing");
-
-//   useEffect(() => {
-//     const interval = setInterval(
-//       async () => {
-//         try {
-//           const response = await axios.get(
-//             `http://localhost:5000/api/payment/status/${paymentIntentId}`,
-//           );
-
-//           const paymentStatus = response.data.status;
-
-//           console.log("Payment Status:", paymentStatus);
-
-//           setStatus(paymentStatus);
-
-//           // SUCCESS
-//           if (paymentStatus === "succeeded") {
-//             clearInterval(interval);
-
-//             window.location.href = "/success";
-//           }
-
-//           // FAILED
-//           if (paymentStatus === "failed") {
-//             clearInterval(interval);
-
-//             window.location.href = "/failure";
-//           }
-//         } catch (error) {
-//           console.log(error);
-//         }
-//       },
-
-//       2000,
-//     );
-
-//     return () => clearInterval(interval);
-//   }, [paymentIntentId]);
-
-//   return (
-//     <div
-//       style={{
-//         textAlign: "center",
-//         marginTop: "100px",
-//       }}
-//     >
-//       <h1>Processing Payment...</h1>
-
-//       <p>Please wait while we verify your payment.</p>
-
-//       <p>Current Status: {status}</p>
-//     </div>
-//   );
-// }
-
-// export default Processing;
-                                       
-
+                                    
 import { useEffect } from "react";
 
-import {
-  useNavigate,
-  useSearchParams,
-  useLocation,
-} from "react-router-dom";
+import {useNavigate,useSearchParams,useLocation,} from "react-router-dom";
 
 import {
   getPaymentStatus,
@@ -144,17 +75,39 @@ function Processing() {
   return (
     <div
       style={{
-        textAlign: "center",
-        marginTop: "100px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+        backgroundColor: "#ffffff",
+        color: "#000000",
+        fontFamily: "system-ui, -apple-system, sans-serif",
       }}
     >
-      <h1>
-        Processing Payment...
+      <div style={{
+        width: "40px",
+        height: "40px",
+        border: "3px solid #f3f4f6",
+        borderTop: "3px solid #000000",
+        borderRadius: "50%",
+        animation: "spin 1s linear infinite",
+        marginBottom: "24px"
+      }}>
+        <style>
+          {`
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          `}
+        </style>
+      </div>
+      <h1 style={{ fontSize: "20px", fontWeight: "500", margin: "0 0 8px 0" }}>
+        Processing Payment
       </h1>
-
-      <p>
-        Please wait while we
-        verify your payment.
+      <p style={{ fontSize: "14px", color: "#6b7280", margin: 0 }}>
+        Please wait while we verify your transaction...
       </p>
     </div>
   );

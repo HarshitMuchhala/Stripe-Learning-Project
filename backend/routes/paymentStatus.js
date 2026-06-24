@@ -1,32 +1,40 @@
 const express = require("express");
-
 const router = express.Router();
-
 const { getStripePaymentIntentStatus } = require("../services/stripeService");
+const payments = require("../utils/paymentStore");
 
-router.get(
-  "/status/:id",
+const STATUS_MAP = {
+  succeeded:               "succeeded",
+  processing:              "processing",
+  requires_action:         "requires_action",
+  requires_payment_method: "failed",
+  requires_confirmation:   "incomplete",
+  canceled:                "canceled",
+};
 
-  async (req, res) => {
+router.get("/status/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
 
-    try {
-      const paymentId =
-        req.params.id;
-
-      const payment =
-        await getStripePaymentIntentStatus(paymentId);
-
-      if (payment.status === "requires_payment_method" || payment.status === "canceled") {
-        return res.json({ status: "failed" });
-      }
-
-      res.json({ status: payment.status });
-    } catch (error) {
-      console.error(error);
-      res.json({ status: "failed" });
+    // Webhook store has richest data — prefer it
+    if (payments[id]) {
+      return res.json(payments[id]);
     }
 
+    // Fallback: ask Stripe directly
+    const pi = await getStripePaymentIntentStatus(id);
+    return res.json({
+      status: STATUS_MAP[pi.status] || pi.status,
+      stripeStatus: pi.status,
+      failureMessage: pi.last_payment_error?.message,
+      failureCode: pi.last_payment_error?.decline_code,
+    });
+
+  } catch (err) {
+    console.error("Status error:", err.message);
+    return res.json({ status: "failed",
+      failureMessage: "Could not retrieve payment status" });
   }
-);
+});
 
 module.exports = router;

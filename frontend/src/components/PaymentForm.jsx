@@ -130,7 +130,11 @@ if (result.error) {
       // Payment Success
       const paymentIntent = result.paymentIntent;
 
-      if (result.paymentIntent.status === "succeeded") {
+      if (
+        result.paymentIntent.status === "succeeded" || 
+        result.paymentIntent.status === "processing" ||
+        result.paymentIntent.status === "requires_capture"
+      ) {
         navigate(`/processing?payment_intent=${paymentIntent.id}`, { state: { name, email, plan, billingCycle, amount } });
       }
 

@@ -135,6 +135,7 @@ if (result.error) {
         result.paymentIntent.status === "processing" ||
         result.paymentIntent.status === "requires_capture"
       ) {
+        localStorage.setItem("payment_intent_id", paymentIntent.id);
         navigate(`/processing?payment_intent=${paymentIntent.id}`, { state: { name, email, plan, billingCycle, amount } });
       }
 

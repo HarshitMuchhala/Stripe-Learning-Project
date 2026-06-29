@@ -4,6 +4,8 @@ import Home from "../pages/Home";
 import Membership from "../pages/Membership";
 import Processing from "../pages/Processing";
 import Success from "../pages/Success";
+import Failed from "../pages/Failed";
+import UnderReview from "../pages/UnderReview";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -20,5 +22,13 @@ export const router = createBrowserRouter([
   {
   path: "/success",
   element: <Success />,
+},
+  {
+  path: "/under-review",
+  element: <UnderReview />,
+},
+  {
+  path: "/failed",
+  element: <Failed />,
 },
 ]);
